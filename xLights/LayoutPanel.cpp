@@ -1,15 +1,15 @@
 #include "LayoutPanel.h"
 
 //(*InternalHeaders(LayoutPanel)
-#include <wx/sizer.h>
-#include <wx/stattext.h>
 #include <wx/checkbox.h>
-#include <wx/splitter.h>
-#include <wx/font.h>
-#include <wx/choice.h>
-#include <wx/intl.h>
+#include <wx/sizer.h>
 #include <wx/button.h>
 #include <wx/string.h>
+#include <wx/splitter.h>
+#include <wx/intl.h>
+#include <wx/font.h>
+#include <wx/stattext.h>
+#include <wx/choice.h>
 //*)
 
 #include <wx/clipbrd.h>
@@ -179,11 +179,11 @@ LayoutPanel::LayoutPanel(wxWindow* parent, xLightsFrame *xl, wxPanel* sequencer)
     appearanceVisible = sizeVisible = stringPropsVisible = false;
 
 	//(*Initialize(LayoutPanel)
-	wxFlexGridSizer* LeftPanelSizer;
+	wxFlexGridSizer* FlexGridSizer1;
 	wxFlexGridSizer* FlexGridSizer2;
 	wxFlexGridSizer* PreviewGLSizer;
 	wxFlexGridSizer* FlexGridSizerPreview;
-	wxFlexGridSizer* FlexGridSizer1;
+	wxFlexGridSizer* LeftPanelSizer;
 
 	Create(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("wxID_ANY"));
 	FlexGridSizerPreview = new wxFlexGridSizer(1, 1, 0, 0);
