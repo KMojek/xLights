@@ -73,10 +73,9 @@ namespace
    {
       float progress;
       Vec2D xy;
+      int   iterationCount;
+      double circleSize;
    };
-
-   const int MaxIterations = 2;
-   const float CircleSize = 1.0 / ( 3.0 * ::pow(2.0, float(MaxIterations) ) );
 
    xlColor fractal( double s, double t, const FractalEffectParams& params )
    {
@@ -88,14 +87,14 @@ namespace
       uv *= RenderBuffer::sin( multProgress ) * 0.5 + 1.5;
 
       float ss = 0.3f;
-      for ( int i = 0; i < MaxIterations; ++i )
+      for ( int i = 0; i < params.iterationCount; ++i )
       {
          uv = uv.Abs() - Vec2D( ss, ss );
          uv = uv.Rotate( multProgress );
          ss /= 2.1f;
       }
 
-      return ( uv.Len() > CircleSize ) ? xlBLACK : xlWHITE;
+      return ( uv.Len() > params.circleSize ) ? xlBLACK : xlWHITE;
    }
 }
 
@@ -121,9 +120,11 @@ void FractalEffect::SetDefaultParameters()
 
     p->BitmapButton_Fractal_X->SetActive( false );
     p->BitmapButton_Fractal_Y->SetActive( false );
+    p->BitmapButton_Fractal_Iterations->SetActive( false );
 
     SetSliderValue( p->Slider_Fractal_X, 50 );
     SetSliderValue( p->Slider_Fractal_Y, 50 );
+    SetSliderValue( p->Slider_Fractal_Iterations, 3 );
 }
 
 void FractalEffect::RemoveDefaults( const std::string &version, Effect *effect )
@@ -137,12 +138,15 @@ void FractalEffect::Render( Effect *eff, SettingsMap &SettingsMap, RenderBuffer 
 
    int xPercentage = GetValueCurveInt( "Fractal_X", 0, SettingsMap, progress, 0, 100 );
    int yPercentage = GetValueCurveInt( "Fractal_Y", 0, SettingsMap, progress, 0, 100 );
+   int iterationCount = GetValueCurveInt( "Fractal_Iterations", 3, SettingsMap, progress, 0, 10 );
    double x = 0.01 * xPercentage;
    double y = 0.01 * yPercentage;
 
    FractalEffectParams params;
    params.progress = progress;
-   params.xy = Vec2D( 0.5, 0.5 );
+   params.xy = Vec2D( x, y );
+   params.iterationCount = iterationCount;
+   params.circleSize = 1.0 / ( 3.0 * ::pow(2.0, float(iterationCount) ) );
 
    for ( int y = 0; y < buffer.BufferHt; ++y )
    {

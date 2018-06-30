@@ -1332,6 +1332,7 @@
 					<wxPanel wxs="wxsmith/JukeboxPanel.wxs" src="JukeboxPanel.cpp" hdr="JukeboxPanel.h" fwddecl="0" i18n="1" name="JukeboxPanel" language="CPP" />
 					<wxDialog wxs="wxsmith/LinkJukeboxButtonDialog.wxs" src="LinkJukeboxButtonDialog.cpp" hdr="LinkJukeboxButtonDialog.h" fwddecl="0" i18n="1" name="LinkJukeboxButtonDialog" language="CPP" />
 					<wxPanel wxs="wxsmith/WarpPanel.wxs" src="effects/WarpPanel.cpp" hdr="effects/WarpPanel.h" fwddecl="0" i18n="1" name="WarpPanel" language="CPP" />
+                                        <wxPanel wxs="wxsmith/FractalPanel.wxs" src="effects/FractalPanel.cpp" hdr="effects/FractalPanel.h" fwddecl="0" i18n="1" name="FractalPanel" language="CPP" />
 				</resources>
 			</wxsmith>
 			<DoxyBlocks>
