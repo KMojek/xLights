@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<object class="wxPanel" name="FractalPanel">
+		<id_arg>0</id_arg>
+		<object class="wxFlexGridSizer" variable="FlexGridSizer1" member="no">
+			<cols>2</cols>
+			<growablecols>1</growablecols>
+			<object class="sizeritem">
+				<object class="wxStaticText" name="ID_STATICTEXT2" variable="StaticText2" member="yes">
+					<label>X</label>
+				</object>
+				<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+				<border>2</border>
+				<option>1</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxFlexGridSizer" variable="FlexGridSizer2" member="no">
+					<cols>3</cols>
+					<growablecols>0</growablecols>
+					<object class="sizeritem">
+						<object class="wxSlider" name="ID_SLIDER_Fractal_X" subclass="BulkEditSlider" variable="Slider_Fractal_X" member="yes">
+							<value>50</value>
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxBitmapButton" name="ID_VALUECURVE_Fractal_X" subclass="BulkEditValueCurveButton" variable="BitmapButton_Fractal_X" member="yes">
+							<style>wxBU_AUTODRAW|wxNO_BORDER</style>
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxTextCtrl" name="ID_TEXTCTRL_Fractal_X" subclass="BulkEditTextCtrl" variable="TextCtrl_Fractal_X" member="yes">
+							<value>50</value>
+							<size>20,-1d</size>
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<border>5</border>
+				<option>1</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxStaticText" name="ID_STATICTEXT1" variable="StaticText1" member="yes">
+					<label>Y</label>
+				</object>
+				<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+				<border>2</border>
+				<option>1</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxFlexGridSizer" variable="FlexGridSizer3" member="no">
+					<cols>3</cols>
+					<growablecols>0</growablecols>
+					<object class="sizeritem">
+						<object class="wxSlider" name="ID_SLIDER_Fractal_Y" subclass="BulkEditSlider" variable="Slider_Fractal_Y" member="yes">
+							<value>50</value>
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxBitmapButton" name="ID_VALUECURVE_Fractal_Y" subclass="BulkEditValueCurveButton" variable="BitmapButton_Fractal_Y" member="yes">
+							<style>wxBU_AUTODRAW|wxNO_BORDER</style>
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxTextCtrl" name="ID_TEXTCTRL_Fractal_Y" subclass="BulkEditTextCtrl" variable="TextCtrl_Fractal_Y" member="yes">
+							<value>50</value>
+							<size>20,-1d</size>
+						</object>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND</flag>
+				<border>5</border>
+				<option>1</option>
+			</object>
+		</object>
+	</object>
+</wxsmith>

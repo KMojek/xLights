@@ -14,6 +14,7 @@
 #include "FillEffect.h"
 #include "FireEffect.h"
 #include "FireworksEffect.h"
+#include "FractalEffect.h"
 #include "GalaxyEffect.h"
 #include "GarlandsEffect.h"
 #include "GlediatorEffect.h"
@@ -66,6 +67,7 @@ EffectManager::EffectManager()
     add(new FillEffect(eff_FILL));
     add(new FireEffect(eff_FIRE));
     add(new FireworksEffect(eff_FIREWORKS));
+    add(new FractalEffect(eff_FRACTAL));
     add(new GalaxyEffect(eff_GALAXY));
     add(new GarlandsEffect(eff_GARLANDS));
     add(new GlediatorEffect(eff_GLEDIATOR));

@@ -678,6 +678,10 @@
 		<Unit filename="effects/FireworksEffect.h" />
 		<Unit filename="effects/FireworksPanel.cpp" />
 		<Unit filename="effects/FireworksPanel.h" />
+		<Unit filename="effects/FractalEffect.cpp" />
+		<Unit filename="effects/FractalEffect.h" />
+		<Unit filename="effects/FractalPanel.cpp" />
+		<Unit filename="effects/FractalPanel.h" />
 		<Unit filename="effects/GIFImage.cpp" />
 		<Unit filename="effects/GIFImage.h" />
 		<Unit filename="effects/GalaxyEffect.cpp" />
@@ -1064,6 +1068,7 @@
 		<Unit filename="wxsmith/FirePanel.wxs" />
 		<Unit filename="wxsmith/FireworksPanel.wxs" />
 		<Unit filename="wxsmith/FolderSelection.wxs" />
+		<Unit filename="wxsmith/FractalPanel.wxs" />
 		<Unit filename="wxsmith/GalaxyPanel.wxs" />
 		<Unit filename="wxsmith/GarlandsPanel.wxs" />
 		<Unit filename="wxsmith/GenerateCustomModelDialog.wxs" />
