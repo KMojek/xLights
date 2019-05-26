@@ -386,6 +386,12 @@
     <ClCompile Include="models\BaseObject.cpp">
       <Filter>Models</Filter>
     </ClCompile>
+    <ClCompile Include="effects\ShaderEffect.cpp">
+      <Filter>Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderPanel.cpp">
+      <Filter>Effects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BatchRenderDialog.h" />
@@ -775,6 +781,12 @@
     </ClInclude>
     <ClInclude Include="models\BaseObject.h">
       <Filter>Models</Filter>
+    </ClInclude>
+    <ClInclude Include="effects\ShaderEffect.h">
+      <Filter>Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderPanel.h">
+      <Filter>Effects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
