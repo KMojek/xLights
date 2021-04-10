@@ -1059,7 +1059,6 @@
 		<Unit filename="models/DMX/ServoConfigDialog.h" />
 		<Unit filename="models/DMX/SkullConfigDialog.cpp" />
 		<Unit filename="models/DMX/SkullConfigDialog.h" />
-		<Unit filename="models/DmxModel.h" />
 		<Unit filename="models/GridlinesObject.cpp" />
 		<Unit filename="models/GridlinesObject.h" />
 		<Unit filename="models/IciclesModel.cpp" />
