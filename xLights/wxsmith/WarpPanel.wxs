@@ -59,6 +59,7 @@
 										<item>sample on</item>
 										<item>mirror</item>
 										<item>copy</item>
+										<item>glow</item>
 									</content>
 									<handler function="OnChoice_Warp_TypeSelect" entry="EVT_CHOICE" />
 								</object>

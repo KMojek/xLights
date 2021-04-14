@@ -29,7 +29,12 @@
 #include "../TimingPanel.h"
 #include "UtilFunctions.h"
 
+#include <log4cpp/Category.hh>
+
 #include "../Parallel.h"
+
+#include <cstdint>
+#include <vector>
 
 namespace
 {
@@ -453,6 +458,199 @@ namespace
       return tex2D( cb, uv.x, uv.y, xlBLACK );
    }
 
+   class FloatColorBuffer
+   {
+   public:
+      FloatColorBuffer( int width, int height )
+         : _width( width )
+         , _height( height )
+      {
+         _cb.resize( width * 4 * height );
+      }
+      FloatColorBuffer( const RenderBuffer& rb )
+         : _width( rb.BufferWi )
+         , _height( rb.BufferHt )
+      {
+         int stride = 4 * _width;
+         const xlColorVector& cv( rb.pixels );
+         int cvIndex = 0, cbIndex = 0;
+         const double mult = 1. / 255;
+
+         _cb.resize( stride * _height );
+         for ( int y = 0; y < _height; ++y)
+         {
+            for ( int x = 0; x < _width; ++x )
+            {
+               xlColor c( cv[cvIndex++] );
+               _cb[cbIndex++] = mult * c.red;
+               _cb[cbIndex++] = mult * c.green;
+               _cb[cbIndex++] = mult * c.blue;
+               _cb[cbIndex++] = mult * c.alpha;
+            }
+         }
+      }
+
+      xlColorVector asColorVector() const
+      {
+         xlColorVector ret( _width * 4 * _height );
+         int cbIndex = 0, cvIndex = 0;
+         for ( int y = 0; y < _height; ++y )
+         {
+            for ( int x = 0; x < _width; ++x, ++cvIndex, cbIndex += 4 )
+            {
+               xlColor c( static_cast<uint8_t>( _cb[cbIndex] * 255 ), static_cast<uint8_t>( _cb[1+cbIndex] * 255 ), static_cast<uint8_t>( _cb[2+cbIndex] * 255 ), static_cast<uint8_t>( _cb[3+cbIndex] * 255 ) );
+               ret[cvIndex] = c;
+            }
+         }
+         return ret;
+      }
+
+      const float& at( int i ) const
+      {
+         return _cb[ static_cast<std::vector<float>::size_type>( i ) ];
+      }
+      float& at( int i )
+      {
+         return _cb[ static_cast<std::vector<float>::size_type>( i ) ];
+      }
+
+      int width() const { return _width; }
+      int height() const { return _height; }
+      //std::vector<float>& cb() { return _cb; }
+
+      const float* tex( double s, double t ) const
+      {
+         s = CLAMP( 0., s, 1. );
+         t = CLAMP( 0., t, 1. );
+
+         int x = static_cast<int>( std::floor( s * (_width - 1) ) );
+         int y = static_cast<int>( std::floor( t * (_height - 1) ) );
+         int index = y * 4 * _width + x * 4;
+         return _cb.data() + index;
+      }
+
+      float* at( double s, double t )
+      {
+         s = CLAMP( 0., s, 1. );
+         t = CLAMP( 0., t, 1. );
+
+         int x = static_cast<int>( s * (_width - 1) );
+         int y = static_cast<int>( t * (_height - 1) );
+         int index = y * 4 * _width + x * 4;
+         return _cb.data() + index;
+      }
+
+   protected:
+      const int               _width;
+      const int               _height;
+      std::vector<float> _cb;
+   };
+
+   void zoomWarp( FloatColorBuffer& fcb, double s, double t, float progress )
+   {
+   #if 0
+      const float scale = 2.f;
+
+      Vec2D p1( s, t );
+      Vec2D p2( (0.5 + (p1.x - 0.5) / scale ), ( 0.5 + (p1.y - 0.5 ) / scale ) );
+      double interpol = 1. - ( std::abs( progress - 0.5 ) * 2.0 );
+      Vec2D p3( Vec2D::lerp( p1, p2, interpol ) );
+      float newColor[4] = {  0.f, 0.f, 0.f, 1.f };
+      if ( progress < 0.5 )
+         memcpy( newColor, fcb.tex( p3.x, p3.y ), sizeof(float[4]) );
+
+      const float* tv = fcb.tex( p3.x, p3.y );
+      double foo = lerp( 0.0, 1.0, interpol );
+#endif
+      float* bar = fcb.at( s, t );
+      bar[0] = /*tv[0] +foo*/0.f;
+      bar[1] = /*tv[1] +foo*/1.f;
+      bar[2] = /*tv[2] +foo*/0.f;
+      bar[3] = /*tv[3] +foo*/1.f;
+   }
+
+   void RenderGlowWarp(  RenderBuffer& rb, const WarpEffectParams& params )
+   {
+      // todo
+      // 1) save off original image
+      // 2) adjust brightness ( drawLuminance( float ( 1 - _Intensity ), 1. )
+      // 3) blur
+      // 4) color-adjust
+      // 5) "bloom" combines (1) with result of (2..4)
+
+      FloatColorBuffer origImage( rb );
+      //FloatColorBuffer imageToAdjust( origImage );
+
+      AudioManager* audioManager = rb.GetMedia();
+      if ( audioManager == nullptr )
+         return;
+
+      auto highData = audioManager->GetFrameData( rb.curPeriod, FRAMEDATA_HIGH, "" );
+      auto lowData = audioManager->GetFrameData( rb.curPeriod, FRAMEDATA_LOW, "" );
+      auto spreadData = audioManager->GetFrameData( rb.curPeriod, FRAMEDATA_SPREAD, "" );
+      auto fftData = audioManager->GetFrameData( rb.curPeriod, FRAMEDATA_VU, "" );
+
+      std::vector<float> fft128( fftData->cbegin(), fftData->cend() );
+      fft128.push_back( 0.f );
+      //float minValue = 10e10f, maxValue = -10e10f;
+      //for ( auto v : fft128 )
+      //{
+      //   minValue = std::min( v, minValue );
+      //   maxValue = std::max( v, maxValue );
+      //}
+      //static log4cpp::Category& logger_base = log4cpp::Category::getInstance(std::string("log_base"));
+      //logger_base.warn( "FFT values (low, high, spread) : %f (%d)   %f (%d)   %f (%d)",
+      //   lowData->front(), int( lowData->size() ), highData->front(), int( highData->size() ), spreadData->front(), int( spreadData->size() ) );
+      //int index = 0;
+
+      for ( int y = 0; y < rb.BufferHt; ++y )
+      {
+         double t = double ( y ) / ( rb.BufferHt - 1);
+         for ( int x = 0; x < rb.BufferWi; ++x )
+         {
+            double s = double( x ) / (rb.BufferWi - 1 );
+            zoomWarp( origImage, s, t, params.progress );
+            //double sScaled = 128 * s;
+            //int fftIndex = (int)std::floor( sScaled );
+            //fftIndex = std::min( fftIndex, 127 );
+
+            // hmm... just playing with colors isn't all that interesting...
+#if 0
+            float r = origImage.at( index );
+            float g = origImage.at( index+1 );
+            float b = origImage.at( index+2 );
+
+            double luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+            double u = -0.09991 * r - 0.33609 * g + 0.436 * b;
+            double v = 0.615 * r - 0.55861 * g - 0.05639 * b;
+
+            // FFT seems to be in [0,1] range
+            // It's unclear what low/high/spread do exactly
+            //double avg = ( lowData->front() + highData->front() ) / 2.0;
+            //luminance = avg;
+            //luminance = std::max( luminance, static_cast<double>( spreadData->front() ) );
+            //luminance = (1/2.5) * luminance * /*fft128[fftIndex]*/highData->front();
+            //u += 0.5 * lowData->front();
+            //v -= 0.5 * lowData->front();
+            //luminance += 0.05 * lowData->front();
+            //luminance *= /*lowData*/highData->front();
+            //luminance = CLAMP( 0., luminance * fft128[fftIndex], 1.0 );
+            //u = v = 0.f;
+
+            origImage.at( index ) = CLAMP( 0.0, luminance + 1.28033 * v, 1.0 );
+            origImage.at( index + 1 ) = CLAMP( 0.0, luminance - 0.21482 * u - 0.38059 * v, 1.0 );
+            origImage.at( index + 2 ) = CLAMP( 0.0, luminance + 2.12798 * u, 1.0 );
+
+            index += 4;
+#endif
+            //rb.SetPixel( x, y, xlColor( 0, 0, 128, 255 ) );
+         }
+      }
+
+      rb.pixels = std::move( origImage.asColorVector() );
+   }
+
+
    typedef xlColor( *PixelTransform ) ( const ColorBuffer& cb, double s, double t, const WarpEffectParams& params );
 
    void RenderSampleOn(RenderBuffer& rb, double x, double y)
@@ -485,7 +683,7 @@ namespace
    }
 }
 
-WarpEffect::WarpEffect(int i) : RenderableEffect(i, "Warp", warp_16_xpm, warp_24_xpm, warp_32_xpm, warp_48_xpm, warp_64_xpm)
+WarpEffect::WarpEffect( int id ) : RenderableEffect( id, "Warp", warp_16_xpm, warp_24_xpm, warp_32_xpm, warp_48_xpm, warp_64_xpm )
 {
 
 }
@@ -525,8 +723,8 @@ void WarpEffect::adjustSettings(const std::string &version, Effect *effect, bool
 
 std::list<std::string> WarpEffect::CheckEffectSettings(const SettingsMap& settings, AudioManager* media, Model* model, Effect* eff, bool renderCache)
 {
-    std::list<std::string> res; 
-    
+    std::list<std::string> res;
+
     if (settings.Get("T_CHECKBOX_Canvas", "0") == "0")
     {
         res.push_back(wxString::Format("    WARN: Canvas mode not enabled on a warp effect. Without canvas mode warp won't do anything. Effect: Warp, Model: %s, Start %s", model->GetFullName(), FORMATTIME(eff->GetStartTimeMS())).ToStdString());
@@ -628,6 +826,11 @@ void WarpEffect::Render(Effect *eff, SettingsMap &SettingsMap, RenderBuffer &buf
 
       params.progress = interpolatedProgress;
       RenderPixelTransform( singleWaterDrop, buffer, params );
+   }
+   else if ( warpType == "glow" )
+   {
+      //RenderPixelTransform( glow, buffer, params );
+      RenderGlowWarp( buffer, params );
    }
    else
    {
