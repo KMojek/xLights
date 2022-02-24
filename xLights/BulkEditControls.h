@@ -15,6 +15,7 @@
 #include <wx/spinctrl.h>
 #include <wx/choice.h>
 #include <wx/checkbox.h>
+#include <wx/combobox.h>
 #include <wx/fontpicker.h>
 #include "ValueCurveButton.h"
 #include "xlLockButton.h"
@@ -232,6 +233,15 @@ public:
     BulkEditStateChoice(wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, int n = 0, const wxString choices[] = NULL, long style = 0, const wxValidator& validator = wxDefaultValidator, const wxString& name = wxChoiceNameStr);
     virtual ~BulkEditStateChoice()
     {}
+    void OnRightDown(wxMouseEvent& event);
+};
+
+class BulkEditComboBox : public BulkEditChoice
+{
+public:
+    BulkEditComboBox(wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, int n = 0, const wxString choices[] = NULL, long style = 0, const wxValidator& validator = wxDefaultValidator, const wxString& name = wxChoiceNameStr);
+    virtual ~BulkEditComboBox() {}
+
     void OnRightDown(wxMouseEvent& event);
 };
 

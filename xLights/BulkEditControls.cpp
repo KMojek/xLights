@@ -159,6 +159,11 @@ BulkEditStateChoice::BulkEditStateChoice(wxWindow* parent, wxWindowID id, const 
     Connect(wxEVT_RIGHT_DOWN, (wxObjectEventFunction)&BulkEditStateChoice::OnRightDown, nullptr, this);
 }
 
+BulkEditComboBox::BulkEditComboBox(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, int n, const wxString choices[], long style, const wxValidator& validator, const wxString& name) :
+    BulkEditChoice(parent, id, pos, size, n, choices, style, validator, name)
+{
+}
+
 BulkEditCheckBox::BulkEditCheckBox(wxWindow* parent, wxWindowID id, const wxString& label, const wxPoint& pos, const wxSize& size, long style, const wxValidator& validator, const wxString& name) :
     wxCheckBox(parent, id, label, pos, size, style, validator, name)
 {
@@ -323,6 +328,11 @@ void BulkEditStateChoice::OnRightDown(wxMouseEvent& event)
     mnu.Append(ID_CHOICE_BULKEDIT, "Bulk Edit");
     mnu.Connect(wxEVT_MENU, (wxObjectEventFunction)&BulkEditChoice::OnChoicePopup, nullptr, this);
     PopupMenu(&mnu);
+}
+
+void BulkEditComboBox::OnRightDown(wxMouseEvent& event)
+{
+    BulkEditChoice::OnRightDown(event);
 }
 
 void BulkEditCheckBox::OnRightDown(wxMouseEvent& event)
